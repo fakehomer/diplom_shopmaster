@@ -42,12 +42,14 @@ class WishlistViewModel : ViewModel() {
 
     fun removeWishlist(wishlistId: String) {
         viewModelScope.launch {
+            repository.deleteWishlistFromFirestore(wishlistId)
             _uiState.value = _uiState.value.copy(
                 wishlists = _uiState.value.wishlists.filterNot { it.id == wishlistId }
             )
             saveWishlists(generateDateKey(), _uiState.value.wishlists)
         }
     }
+
 
     fun addItemToWishlist(wishlistId: String, name: String, price: Double, link: String, imageUrl: String?, currency: String) {
         viewModelScope.launch {

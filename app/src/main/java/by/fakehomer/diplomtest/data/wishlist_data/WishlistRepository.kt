@@ -12,6 +12,20 @@ class WishlistRepository {
     private val storage = FirebaseStorage.getInstance()
     private val user = FirebaseAuth.getInstance().currentUser
 
+    fun deleteWishlistFromFirestore(wishlistId: String) {
+        user?.let {
+            db.collection("users").document(user.uid)
+                .collection("wishlists").document(wishlistId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Wishlist successfully deleted!")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Firestore", "Error deleting wishlist", e)
+                }
+        }
+    }
+
     fun uploadImageToFirebaseStorage(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
         user?.let {
             val storageRef = storage.reference.child("users/${it.uid}/images/${imageUri.lastPathSegment}")

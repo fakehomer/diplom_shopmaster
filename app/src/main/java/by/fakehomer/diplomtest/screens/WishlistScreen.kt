@@ -276,10 +276,12 @@ fun SwipeToDeleteWishlist(
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
                     onDragEnd = {
+                        if (isSwiped) {
+                            onDeleteRequest()
+                        }
                         isSwiped = false
-                        onDeleteRequest()
                     },
-                    onHorizontalDrag = { change, dragAmount ->
+                    onHorizontalDrag = { _, dragAmount ->
                         isSwiped = dragAmount < 0
                     }
                 )
@@ -290,13 +292,7 @@ fun SwipeToDeleteWishlist(
                 .offset(x = offsetX)
                 .fillMaxWidth()
                 .height(100.dp)
-                .clickable(
-                    onClick = {
-                        onClick()
-                    },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = true)
-                ),
+                .clickable(onClick = onClick),
             shape = RoundedCornerShape(8.dp),
             elevation = 4.dp,
             backgroundColor = backgroundColor
