@@ -21,7 +21,6 @@ class UserRepository {
             return
         }
 
-        val dateKey = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
         val userInfo = mapOf(
             "firstName" to firstName,
             "lastName" to lastName,
@@ -29,7 +28,6 @@ class UserRepository {
         )
 
         db.collection("users").document(user.uid)
-            .collection("user_info").document(dateKey)
             .set(userInfo)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
